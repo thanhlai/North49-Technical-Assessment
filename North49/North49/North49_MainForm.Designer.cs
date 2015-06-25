@@ -40,16 +40,20 @@
             this.countryTextBox = new System.Windows.Forms.TextBox();
             this.zipTextBox = new System.Windows.Forms.TextBox();
             this.stateTextBox = new System.Windows.Forms.TextBox();
-            this.filterButton = new System.Windows.Forms.PictureBox();
+            this.refreshButton = new System.Windows.Forms.PictureBox();
             this.removeButton = new System.Windows.Forms.PictureBox();
             this.addButton = new System.Windows.Forms.PictureBox();
+            this.filterButton = new System.Windows.Forms.PictureBox();
             this.helpButton = new System.Windows.Forms.PictureBox();
             this.browseButton = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.groupBoxAdd.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.filterButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.refreshButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.addButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filterButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.helpButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.browseButton)).BeginInit();
             this.SuspendLayout();
@@ -87,10 +91,13 @@
             // 
             // groupBoxAdd
             // 
+            this.groupBoxAdd.Controls.Add(this.label2);
+            this.groupBoxAdd.Controls.Add(this.label1);
             this.groupBoxAdd.Controls.Add(this.countryTextBox);
             this.groupBoxAdd.Controls.Add(this.zipTextBox);
             this.groupBoxAdd.Controls.Add(this.stateTextBox);
             this.groupBoxAdd.Controls.Add(this.cityTextBox);
+            this.groupBoxAdd.Controls.Add(this.addButton);
             this.groupBoxAdd.Controls.Add(this.addressTextBox);
             this.groupBoxAdd.Controls.Add(this.nameTextBox);
             this.groupBoxAdd.Controls.Add(this.idTextBox);
@@ -107,6 +114,7 @@
             this.idTextBox.Name = "idTextBox";
             this.idTextBox.Size = new System.Drawing.Size(201, 20);
             this.idTextBox.TabIndex = 0;
+            this.idTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.idTextBox_KeyPress);
             this.idTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.idTextBox_MouseDown);
             // 
             // nameTextBox
@@ -157,22 +165,22 @@
             this.stateTextBox.TabIndex = 4;
             this.stateTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.stateTextBox_MouseDown);
             // 
-            // filterButton
+            // refreshButton
             // 
-            this.filterButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.filterButton.Image = global::North49.Properties.Resources.filter;
-            this.filterButton.Location = new System.Drawing.Point(693, 374);
-            this.filterButton.Name = "filterButton";
-            this.filterButton.Size = new System.Drawing.Size(50, 50);
-            this.filterButton.TabIndex = 32;
-            this.filterButton.TabStop = false;
-            this.filterButton.Click += new System.EventHandler(this.filterButton_Click);
+            this.refreshButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.refreshButton.Image = global::North49.Properties.Resources.refresh;
+            this.refreshButton.Location = new System.Drawing.Point(770, 374);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(53, 51);
+            this.refreshButton.TabIndex = 34;
+            this.refreshButton.TabStop = false;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // removeButton
             // 
             this.removeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.removeButton.Image = global::North49.Properties.Resources.remove;
-            this.removeButton.Location = new System.Drawing.Point(845, 371);
+            this.removeButton.Location = new System.Drawing.Point(849, 374);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(48, 50);
             this.removeButton.TabIndex = 8;
@@ -183,12 +191,23 @@
             // 
             this.addButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addButton.Image = global::North49.Properties.Resources.add;
-            this.addButton.Location = new System.Drawing.Point(770, 372);
+            this.addButton.Location = new System.Drawing.Point(7, 209);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(50, 50);
             this.addButton.TabIndex = 7;
             this.addButton.TabStop = false;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
+            // filterButton
+            // 
+            this.filterButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.filterButton.Image = global::North49.Properties.Resources.filter;
+            this.filterButton.Location = new System.Drawing.Point(693, 374);
+            this.filterButton.Name = "filterButton";
+            this.filterButton.Size = new System.Drawing.Size(50, 50);
+            this.filterButton.TabIndex = 32;
+            this.filterButton.TabStop = false;
+            this.filterButton.Click += new System.EventHandler(this.filterButton_Click);
             // 
             // helpButton
             // 
@@ -212,16 +231,34 @@
             this.browseButton.TabStop = false;
             this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(82, 246);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(122, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "*ID cannot be the same.";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(82, 209);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(111, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "*All fields are required.";
+            // 
             // North49_MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(996, 452);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.groupBoxAdd);
             this.Controls.Add(this.filterButton);
-            this.Controls.Add(this.dataGrid);
             this.Controls.Add(this.removeButton);
-            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.dataGrid);
             this.Controls.Add(this.alterTextBox);
             this.Controls.Add(this.helpButton);
             this.Controls.Add(this.browseButton);
@@ -234,9 +271,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.groupBoxAdd.ResumeLayout(false);
             this.groupBoxAdd.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.filterButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.refreshButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.addButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filterButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.helpButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.browseButton)).EndInit();
             this.ResumeLayout(false);
@@ -262,6 +300,9 @@
         private System.Windows.Forms.TextBox addressTextBox;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.TextBox idTextBox;
+        private System.Windows.Forms.PictureBox refreshButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

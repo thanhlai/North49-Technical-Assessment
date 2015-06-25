@@ -27,6 +27,7 @@ namespace North49
         }
 
         // 1. Loads CSV and display into the grid view
+        private string[] attributeRow;
         private void LoadCSVToDataGridView(string filePath)
         {
             DataSet ds = new DataSet();
@@ -36,12 +37,12 @@ namespace North49
             //string csv = File.ReadAllText(filePath);
             // Defines a new table to hold the data set
             ds.Tables.Add(tableName);   //table's name
-            
-           
 
-            string[] rows = sr.ReadToEnd().Split("\n".ToCharArray());
+
+
+            string[] rows = sr.ReadToEnd().Replace("\"", "").Split("\n".ToCharArray());
             int firstRow = 0; // just a flag so that it knows the first row's data will be the columns' attributes
-            foreach(string row in rows)
+            foreach (string row in rows)
             {
                 string[] records = row.Split(",".ToCharArray());
                 // Table's attributes: ID,Name,Address,City,State,Zip,Country / or first rows values as columns's attribute
@@ -49,6 +50,7 @@ namespace North49
                 {
                     for (int i = 0; i < records.Length; i++)
                     {
+                        attributeRow = records;
                         ds.Tables[tableName].Columns.Add(records[i]);
                     }
                 }
@@ -78,6 +80,7 @@ namespace North49
             removeButton.Hide();
             alterTextBox.Text = "Enter keyword here";
             alterTextBox.Hide();
+            refreshButton.Hide();
             dataGrid.Hide();
             groupBoxAdd.Hide();
         }
@@ -101,6 +104,7 @@ namespace North49
                     addButton.Show();
                     removeButton.Show();
                     alterTextBox.Show();
+                    refreshButton.Show();
                     dataGrid.Show();
                     groupBoxAdd.Show();
                     //
@@ -129,7 +133,8 @@ namespace North49
         // ------------------- ADD a new record
         private void AddARecord(string newRecord)
         {
-            DataProcessing.AddARecord(filePath, newRecord + Environment.NewLine);
+            if (!DataProcessing.AddARecord(filePath, '\r' + newRecord + Environment.NewLine))
+                MessageBox.Show("An error has been occured, Hint: the ID may already exist in the file");
         }
         // ------------------- REMOVE a record
         private void RemoveARecord()
@@ -144,7 +149,7 @@ namespace North49
                         DataProcessing.RemoveARecord(filePath, rowIndex + 1);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
@@ -159,7 +164,7 @@ namespace North49
                 string filterTableName = "filterTable";
 
                 // Defines a new table to hold the new data set
-                ds.Tables.Add(filterTableName); 
+                ds.Tables.Add(filterTableName);
 
                 int firstRow = 0; // just a flag so that it knows the first row's data will be the columns' attributes
                 foreach (string row in DataProcessing.FilterARecord(filePath, alterTextBox.Text))
@@ -169,13 +174,10 @@ namespace North49
                     {
                         for (int i = 0; i < records.Length; i++)
                         {
-                            ds.Tables[filterTableName].Columns.Add(records[i]);
+                            ds.Tables[filterTableName].Columns.Add(attributeRow[i]);
                         }
                     }
-                    else
-                    {
-                        ds.Tables[filterTableName].Rows.Add(records);
-                    }
+                    ds.Tables[filterTableName].Rows.Add(records);
                     firstRow++;
                 }
                 dataGrid.DataSource = ds.Tables[filterTableName].DefaultView;
@@ -208,9 +210,16 @@ namespace North49
             // revert to original grid view before adding
             LoadCSVToDataGridView(filePath);
 
-            if (!string.IsNullOrEmpty(idTextBox.Text) && !string.IsNullOrEmpty(nameTextBox.Text) && !string.IsNullOrEmpty(addressTextBox.Text) && !string.IsNullOrEmpty(cityTextBox.Text) && !string.IsNullOrEmpty(stateTextBox.Text) && !string.IsNullOrEmpty(zipTextBox.Text) && !string.IsNullOrEmpty(countryTextBox.Text))
+            if (!string.IsNullOrEmpty(idTextBox.Text) && !string.IsNullOrEmpty(nameTextBox.Text) && !string.IsNullOrEmpty(addressTextBox.Text) && !string.IsNullOrEmpty(cityTextBox.Text) && !string.IsNullOrEmpty(stateTextBox.Text) && !string.IsNullOrEmpty(zipTextBox.Text) && !string.IsNullOrEmpty(countryTextBox.Text) &&
+            ((idTextBox.Text != "ID") &&
+            (nameTextBox.Text != "Name") &&
+            (addressTextBox.Text != "Address") &&
+            (cityTextBox.Text != "City") &&
+            (stateTextBox.Text != "State") &&
+            (zipTextBox.Text != "ZIP") &&
+            (countryTextBox.Text != "Country")))
             {
-                AddARecord(idTextBox.Text + "," + nameTextBox.Text + "," + addressTextBox.Text + "," + cityTextBox.Text + "," + stateTextBox.Text + "," + zipTextBox.Text + ","+ countryTextBox.Text);
+                AddARecord(idTextBox.Text + "," + nameTextBox.Text + "," + addressTextBox.Text + "," + cityTextBox.Text + "," + stateTextBox.Text + "," + zipTextBox.Text + "," + countryTextBox.Text + "\r");
                 UpdateDataGrid();
             }
 
@@ -231,7 +240,7 @@ namespace North49
 
         private void helpButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This is a help button :)");
+            MessageBox.Show("Credits: Thanh Lai \nIcon pack: iconfinder.com \nCompany: North49 Business Solutions \nSupervisor: Michael VanKuipers \nHelp Menu: to be written...");
         }
 
         private void countryTextBox_MouseDown(object sender, MouseEventArgs e)
@@ -268,7 +277,18 @@ namespace North49
         {
             idTextBox.Text = "";
         }
-        
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            LoadCSVToDataGridView(filePath);
+        }
+
+        // numeric textbox only
+        private void idTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
 
     }
 }
