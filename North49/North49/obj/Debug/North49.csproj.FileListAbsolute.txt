@@ -6,3 +6,4 @@ C:\Users\Thanh\Desktop\North49\North49\North49\obj\Debug\North49.Properties.Reso
 C:\Users\Thanh\Desktop\North49\North49\North49\obj\Debug\North49.csproj.GenerateResource.Cache
 C:\Users\Thanh\Desktop\North49\North49\North49\obj\Debug\North49.exe
 C:\Users\Thanh\Desktop\North49\North49\North49\obj\Debug\North49.pdb
+C:\Users\Thanh\Desktop\North49\North49\North49\obj\Debug\North49.csprojResolveAssemblyReference.cache

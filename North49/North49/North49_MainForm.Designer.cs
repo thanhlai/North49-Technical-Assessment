@@ -29,28 +29,19 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(North49_MainForm));
-            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.introLabel = new System.Windows.Forms.Label();
             this.alterTextBox = new System.Windows.Forms.TextBox();
             this.removeButton = new System.Windows.Forms.PictureBox();
             this.addButton = new System.Windows.Forms.PictureBox();
             this.helpButton = new System.Windows.Forms.PictureBox();
             this.browseButton = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.dataGrid = new System.Windows.Forms.DataGrid();
             ((System.ComponentModel.ISupportInitialize)(this.removeButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.addButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.helpButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.browseButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGridView
-            // 
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(12, 25);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(972, 270);
-            this.dataGridView.TabIndex = 0;
-            this.dataGridView.Visible = false;
             // 
             // introLabel
             // 
@@ -81,6 +72,7 @@
             this.removeButton.Size = new System.Drawing.Size(48, 50);
             this.removeButton.TabIndex = 8;
             this.removeButton.TabStop = false;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // addButton
             // 
@@ -113,28 +105,40 @@
             this.browseButton.TabStop = false;
             this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
+            // dataGrid
+            // 
+            this.dataGrid.DataMember = "";
+            this.dataGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.dataGrid.Location = new System.Drawing.Point(12, 20);
+            this.dataGrid.Name = "dataGrid";
+            this.dataGrid.PreferredColumnWidth = 100;
+            this.dataGrid.ReadOnly = true;
+            this.dataGrid.Size = new System.Drawing.Size(972, 294);
+            this.dataGrid.TabIndex = 31;
+            this.dataGrid.Click += new System.EventHandler(this.dataGrid_Click);
+            // 
             // North49_MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(996, 452);
+            this.Controls.Add(this.dataGrid);
             this.Controls.Add(this.removeButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.alterTextBox);
             this.Controls.Add(this.helpButton);
             this.Controls.Add(this.browseButton);
             this.Controls.Add(this.introLabel);
-            this.Controls.Add(this.dataGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "North49_MainForm";
             this.Text = "North49 - Thanh Lai";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.addButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.helpButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.browseButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,13 +146,13 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Label introLabel;
         private System.Windows.Forms.PictureBox browseButton;
         private System.Windows.Forms.PictureBox helpButton;
         private System.Windows.Forms.TextBox alterTextBox;
         private System.Windows.Forms.PictureBox addButton;
         private System.Windows.Forms.PictureBox removeButton;
+        private System.Windows.Forms.DataGrid dataGrid;
     }
 }
 

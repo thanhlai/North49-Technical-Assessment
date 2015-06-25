@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProcessing.cs" />
     <Compile Include="North49_MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

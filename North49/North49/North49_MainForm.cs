@@ -58,7 +58,11 @@ namespace North49
                 }
                 firstRow++;
             }
-            dataGridView.DataSource = ds.Tables[tableName].DefaultView;
+            dataGrid.DataSource = ds.Tables[tableName].DefaultView;
+
+            //close the stream reader, ghuuuu
+            sr.Close();
+
         }
 
         private void SetUp()
@@ -74,7 +78,7 @@ namespace North49
             alterTextBox.Text = "Enter keyword here";
             alterTextBox.Hide();
         }
-
+        private static string filePath;
         private void browseButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -86,12 +90,14 @@ namespace North49
                 // csv error handling
                 if (ofd.FileName.EndsWith(".csv"))
                 {
+                    filePath = ofd.FileName; // assign filePath
+
                     LoadCSVToDataGridView(ofd.FileName);
                     introLabel.Hide();
                     addButton.Show();
                     removeButton.Show();
                     alterTextBox.Show();
-                    dataGridView.Show();
+                    dataGrid.Show();
                 }
                 else
                 {
@@ -111,6 +117,7 @@ namespace North49
         }
 
         // 2. Modifies records
+        private int rowIndex = -1; //default invalid row index
         // ------------------- ADD a new record
         private void AddARecord()
         {
@@ -119,7 +126,38 @@ namespace North49
         // ------------------- REMOVE a record
         private void RemoveARecord()
         {
-
+            if (rowIndex != -1)
+            {
+                try
+                {
+                    DialogResult dr = MessageBox.Show("Are you sure you want to remove this record?", "Attempting to remove a record", MessageBoxButtons.YesNo);
+                    if (dr == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        DataProcessing.RemoveARecord(filePath, rowIndex + 1);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
+        // ------------------- UPDATE the Data Grid
+        private void UpdateDataGrid()
+        {
+            LoadCSVToDataGridView(filePath);
+        }
+
+        private void dataGrid_Click(object sender, EventArgs e)
+        {
+            rowIndex = dataGrid.CurrentRowIndex;
+        }
+
+        private void removeButton_Click(object sender, EventArgs e)
+        {
+            RemoveARecord();
+            UpdateDataGrid();
+        }
+
     }
 }
