@@ -73,10 +73,13 @@ namespace North49
             introLabel.Text += "\n1. Clicking onto the envelope icon below to browse and select your CSV file";
             introLabel.Text += "\n2. The program will automatically display the data in that CSV file to the Data Grid View";
             introLabel.Text += "\n3. Hint: clicking on the help icon in the bottom left of the program for more helps or to see credits.";
+            filterButton.Hide();
             addButton.Hide();
             removeButton.Hide();
             alterTextBox.Text = "Enter keyword here";
             alterTextBox.Hide();
+            dataGrid.Hide();
+            groupBoxAdd.Hide();
         }
         private static string filePath;
         private void browseButton_Click(object sender, EventArgs e)
@@ -94,21 +97,26 @@ namespace North49
 
                     LoadCSVToDataGridView(ofd.FileName);
                     introLabel.Hide();
+                    filterButton.Show();
                     addButton.Show();
                     removeButton.Show();
                     alterTextBox.Show();
                     dataGrid.Show();
+                    groupBoxAdd.Show();
+                    //
+                    idTextBox.Text = "ID";
+                    nameTextBox.Text = "Name";
+                    addressTextBox.Text = "Address";
+                    cityTextBox.Text = "City";
+                    stateTextBox.Text = "State";
+                    zipTextBox.Text = "ZIP";
+                    countryTextBox.Text = "Country";
                 }
                 else
                 {
                     MessageBox.Show("The file you are trying to open is not supported by this program.", "Unsupported Extension", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-
-        private void alterTextBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void alterTextBox_MouseDown(object sender, MouseEventArgs e)
@@ -119,9 +127,9 @@ namespace North49
         // 2. Modifies records
         private int rowIndex = -1; //default invalid row index
         // ------------------- ADD a new record
-        private void AddARecord()
+        private void AddARecord(string newRecord)
         {
-
+            DataProcessing.AddARecord(filePath, newRecord + Environment.NewLine);
         }
         // ------------------- REMOVE a record
         private void RemoveARecord()
@@ -142,6 +150,42 @@ namespace North49
                 }
             }
         }
+        // ------------------- FILTER records
+        private void FilterRecords()
+        {
+            if (!string.IsNullOrEmpty(alterTextBox.Text))
+            {
+                DataSet ds = new DataSet();
+                string filterTableName = "filterTable";
+
+                // Defines a new table to hold the new data set
+                ds.Tables.Add(filterTableName); 
+
+                int firstRow = 0; // just a flag so that it knows the first row's data will be the columns' attributes
+                foreach (string row in DataProcessing.FilterARecord(filePath, alterTextBox.Text))
+                {
+                    string[] records = row.Split(",".ToCharArray());
+                    if (firstRow == 0)
+                    {
+                        for (int i = 0; i < records.Length; i++)
+                        {
+                            ds.Tables[filterTableName].Columns.Add(records[i]);
+                        }
+                    }
+                    else
+                    {
+                        ds.Tables[filterTableName].Rows.Add(records);
+                    }
+                    firstRow++;
+                }
+                dataGrid.DataSource = ds.Tables[filterTableName].DefaultView;
+            }
+            else
+            {
+                // Reload the original grid view if no search keyword
+                LoadCSVToDataGridView(filePath);
+            }
+        }
         // ------------------- UPDATE the Data Grid
         private void UpdateDataGrid()
         {
@@ -158,6 +202,73 @@ namespace North49
             RemoveARecord();
             UpdateDataGrid();
         }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            // revert to original grid view before adding
+            LoadCSVToDataGridView(filePath);
+
+            if (!string.IsNullOrEmpty(idTextBox.Text) && !string.IsNullOrEmpty(nameTextBox.Text) && !string.IsNullOrEmpty(addressTextBox.Text) && !string.IsNullOrEmpty(cityTextBox.Text) && !string.IsNullOrEmpty(stateTextBox.Text) && !string.IsNullOrEmpty(zipTextBox.Text) && !string.IsNullOrEmpty(countryTextBox.Text))
+            {
+                AddARecord(idTextBox.Text + "," + nameTextBox.Text + "," + addressTextBox.Text + "," + cityTextBox.Text + "," + stateTextBox.Text + "," + zipTextBox.Text + ","+ countryTextBox.Text);
+                UpdateDataGrid();
+            }
+
+            //reset those text box with placeholders
+            idTextBox.Text = "ID";
+            nameTextBox.Text = "Name";
+            addressTextBox.Text = "Address";
+            cityTextBox.Text = "City";
+            stateTextBox.Text = "State";
+            zipTextBox.Text = "ZIP";
+            countryTextBox.Text = "Country";
+        }
+
+        private void filterButton_Click(object sender, EventArgs e)
+        {
+            FilterRecords();
+        }
+
+        private void helpButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This is a help button :)");
+        }
+
+        private void countryTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            countryTextBox.Text = "";
+        }
+
+        private void zipTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            zipTextBox.Text = "";
+        }
+
+        private void stateTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            stateTextBox.Text = "";
+        }
+
+        private void cityTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            cityTextBox.Text = "";
+        }
+
+        private void addressTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            addressTextBox.Text = "";
+        }
+
+        private void nameTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            nameTextBox.Text = "";
+        }
+
+        private void idTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            idTextBox.Text = "";
+        }
+        
 
     }
 }
